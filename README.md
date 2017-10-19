@@ -23,7 +23,7 @@ The following picture summarizes the bot application architecture:
 * The action is fulfilled by a web service.
 
 ### Web Fulfillment Service
-* The Web Fulfillment Service is a [Flask Application](http://flask.pocoo.org/), which was implemented as a single file (app.py).
+* The Web Fulfillment Service is a [Flask Application](http://flask.pocoo.org/), which was implemented as a single file ([app.py](https://github.com/renatalucia/lucybot-2017/blob/master/app.py)).
 * This aplication calls a RESTful API ([rest-countries](https://market.mashape.com/fayder/rest-countries-v1)) to get information about countries, and the [Yahoo Weather API](https://developer.yahoo.com/weather/) to get weather information.
 * The application was deployed to [Heroku](https://www.heroku.com/platform).
 
