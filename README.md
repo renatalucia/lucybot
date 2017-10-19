@@ -11,7 +11,7 @@ We can ask the but things like:
   
   Try with yourself with this [Web demo](https://bot.dialogflow.com/721be6fe-9b42-45bc-94ca-ddcc740190e9)
 
-## Descrition
+## Description
 
 The following picture summarizes the bot application architecture:
 ![building blocks overview](bot_framework.png)
