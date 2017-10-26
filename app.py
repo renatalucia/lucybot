@@ -43,9 +43,7 @@ def processRequest(req):
         parameters = result.get("parameters")
         city = parameters.get("geo-city")
         day = parameters.get("date")
-        print('day: ', day)
         yql_query = makeYqlQuery(city)
-        print('query: ', yql_query)
         if yql_query is None:
             return {}
         yql_url = baseurl + urlencode({'q': yql_query}) + "&format=json"
@@ -64,10 +62,53 @@ def processRequest(req):
     if req.get("result").get("action") == 'search_country_population':
         print('action: ', 'search_country_population')
         country_data = getCountryData(req)
-        print('country_data: ', country_data)
         speech = makeCountryPopulationSpeech(country_data)
         print('speech: ', speech)
         return makeWebhookCountryResult(country_data, speech)
+
+    if req.get("result").get("action") == 'search_country_summary':
+        print('action: ', 'search_country_summary')
+        country_data = getCountryData(req)
+        print('country_data: ', country_data)
+        speech = makeCountrySummarySpeech(country_data)
+        print('speech: ', speech)
+        return makeWebhookCountryResult(country_data, speech)
+
+    if req.get("result").get("action") == 'select_topic':
+        result = req.get("result")
+        parameters = result.get("parameters")
+        topic = parameters.get("topic")
+        if topic == 'countries':
+            speech = 'Which country do you want to learn more about?'
+            return {
+                "speech": speech,
+                "displayText": speech,
+                "contextOut": [{'name': 'topic_country'}],
+                "data": {},
+                "source": ""
+            }
+        if topic == 'weather':
+            speech = 'Weather for which city?'
+            return {
+                "speech": speech,
+                "displayText": speech,
+                "contextOut": [{'name': 'topic_weather'}]
+            }
+        if topic == 'both' or topic == 'unkown':
+            speech = 'Lets start with weather. For which city to want to search the weather?'
+            return {
+                "speech": speech,
+                "displayText": speech,
+                "contextOut": [{'name': 'topic_weather'}],
+                "data": {},
+                "source": ""
+            }
+        else:
+            speech = 'At the moment I can only give information about countries and weather.'
+            return {
+                "speech": speech,
+                "displayText": speech,
+            }
 
     return {}
 
@@ -91,6 +132,10 @@ def makeCountryCapitalSpeech(data):
 
 def makeCountryPopulationSpeech(data):
     return '{} has {} inhabitants'.format(data['name'], data['population'])
+
+def makeCountrySummarySpeech(data):
+    return '{} is located in {}, it has {} inhabitants. It\'s capital is {}'.format(
+        data['name'], data['subregion'], data['population'], data['capital'])
 
 
 def makeWebhookCountryResult(data, speech):
